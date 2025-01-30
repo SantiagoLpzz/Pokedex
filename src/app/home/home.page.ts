@@ -10,18 +10,25 @@ import { PokeapiService } from '../pokeapi.service';
 export class HomePage {
 
   listPokemones: any = [];
+  selectedPokemon: any = null;
 
   constructor(private pokeservice: PokeapiService) {}
 
   ngOnInit(){
     this.pokeservice.getListPokemones().subscribe((data) => {
       this.listPokemones = data.results;
-      console.log(data.results)
-    })
+      console.log(data.results);
+    });
   }
 
-  handleDetail(){
-
+  handleDetail(url: string) {
+    if (this.selectedPokemon?.url === url) {
+      this.selectedPokemon = null;
+    } else {
+      this.pokeservice.getDetailPokemon(url).subscribe((data) => {
+        this.selectedPokemon = { ...data, url };
+        console.log(data);
+      });
+    }
   }
-
 }
